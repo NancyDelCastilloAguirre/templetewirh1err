@@ -8,7 +8,7 @@ export const BalanceDisplay = () => {
   const { publicKey } = useWallet()
   var Tpersonas;
   var Paga;
-  var bal2, n, valor, valor2, VB;
+  var bal2, valor, valor2, VB;
   
   useEffect(() => {
     if (!connection || !publicKey) {
@@ -21,11 +21,11 @@ export const BalanceDisplay = () => {
   }, [connection, publicKey])
 
 function table(){
-
-if(typeof document!== null){
+try{
+if(typeof document!== 'undefined'){
   valor=""; 
   
-  n=document.getElementById("personas").innerHTML;
+  var n=document.getElementById("personas").innerHTML;
   var input=document.getElementById("personas");
   
   input.addEventListener("input", function(event){
@@ -68,7 +68,7 @@ input.addEventListener("input", () => {
     row.appendChild(textCell);
     bal2=balance
     console.log(bal2);
-    var VB=bal2/valor;
+    VB=bal2/LAMPORTS_PER_SOL/valor;
     document.getElementById("VB").innerHTML=VB;
     
     
@@ -76,23 +76,31 @@ input.addEventListener("input", () => {
 });
 
 
+}else{console.log("some");}
+}catch(error){
+  
+  console.log(error);
 }
 
-else{console.log("matame");}
+
+
 }
   return ( 
    
     <div className="block text-sm font-medium text-gray-700">
       <p className="block text-sm font-medium text-gray-700">{publicKey ? `Cuenta: ${publicKey}` : ""}</p>
       <p className="block text-sm font-medium text-gray-700" id="balance" >{publicKey ? `Balance: ${balance / LAMPORTS_PER_SOL }` : ""}</p>
-      <p className="block text-sm font-medium text-gray-700" id="VB">{publicKey? `Varianza de balance: ${VB}`:""}</p>
-      <input type="number" id="personas" max={20}></input>
-      <button className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" onClick={table()}>Noc</button>
+      <p className="block text-sm font-medium text-gray-700" id="VB">{publicKey? `Varianza de balance: ${VB}`:""}</p><br></br>
+      <p>Number of employees  </p>
+      <input type="number" id="personas" className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" max={20}></input>
+      <button className=" text-black px-3 py-2 rounded-md text-sm font-medium" onClick={table()}>Noc</button>
+      <br></br>
+      <br></br>
       <table id="tabla" className="border-separate border-spacing-2 border border-slate-400"> 
           <thead>
             <tr>
-              <th className="border border-slate-300">Números<br/> de empleado</th>
-              <th className="border border-slate-300">Public Key</th>
+              <th className="border border-slate-300">Number<br/>of employees</th>
+              <th className="border border-slate-300">Public Key (account)</th>
             </tr>
           </thead>
           <tbody></tbody>
